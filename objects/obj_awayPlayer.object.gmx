@@ -442,6 +442,10 @@ if (selected) {
             draw_rectangle(_originX - 48, _originY - 48, _originX + 48, _originY + 48, 0);
             draw_rectangle(_originX - 16, _originY - 80, _originX + 16, _originY + 80, 0);
             draw_rectangle(_originX - 80, _originY - 16, _originX + 80, _originY + 16, 0);
+            draw_set_alpha(1);
+            draw_set_blend_mode(bm_subtract);
+            draw_rectangle((_originX div 32)*32, (_originY div 32)*32, (_originX div 32)*32 + 32, (_originY div 32)*32 + 32, 0);
+            draw_set_blend_mode(bm_normal);
             
             //Make sure to erase the opponent spaces and any potential movement paths that would be blocked by an opponent
             with(_opponent) {
@@ -496,6 +500,13 @@ if (selected) {
             }
             
             moved = _moved;
+            
+            if (_mySelf.held &amp;&amp; _moved) {
+                draw_set_alpha(0.75);
+                draw_set_color(c_white);
+                draw_rectangle((_mySelf.x div 32)*32, (_mySelf.y div 32)*32, (_mySelf.x div 32)*32 + 32, (_mySelf.y div 32)*32 + 32, 1);
+                draw_rectangle((_mySelf.x div 32)*32 + 1, (_mySelf.y div 32)*32 + 1, (_mySelf.x div 32)*32 + 32 - 1, (_mySelf.y div 32)*32 + 32 - 1, 1);
+            }
             
             surface_reset_target();
         }
@@ -797,7 +808,7 @@ if (showTarget &amp;&amp; team == global.turn) {
         else {
             with(_opponent) {
                 if (point_distance(_xx, _yy, x, y) &lt;= 64) {
-                    draw_set_alpha(((1 - point_distance(_xx, _yy, x, y)/96))*_mySelf.block/75); // Alpha based on chance of block success
+                    draw_set_alpha(((1 - point_distance(_xx, _yy, x, y)/96))*_mySelf.block/50); // Alpha based on chance of block success
                     draw_set_color(_col);
                     draw_line_width(_xx, _yy, x, y, 4);
                     draw_circle(x, y, 16, 0);

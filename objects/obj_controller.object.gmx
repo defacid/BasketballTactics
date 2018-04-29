@@ -152,6 +152,10 @@ draw_set_color(c_white);
 draw_rectangle(room_width - hudWidth + lineSpacing * 2, lineHeight - lineSpacing, room_width - lineSpacing * 2, lineHeight + 44, 1);
 
 draw_set_font(fnt_timerName);
+draw_set_color(c_black);
+draw_text(room_width - hudWidth + lineSpacing * 4 + 1 + 1, lineHeight + 1, "TURNS LEFT");
+draw_text(room_width - string_width("SHOT CLOCK") - lineSpacing * 4 + 1, lineHeight + 1, "SHOT CLOCK");
+
 draw_set_color(c_white);
 draw_text(room_width - hudWidth + lineSpacing * 4 + 1, lineHeight, "TURNS LEFT");
 draw_set_color(c_red);
@@ -201,7 +205,7 @@ for(i=0; i&lt;=1; i++) {
     draw_set_color(c_white);
     draw_set_font(fnt_score);
     draw_text(room_width - hudWidth/2 - string_width(scoreLine[i])/2, lineHeight, scoreLine[i]);
-    lineHeight += string_height(scoreLine[i]) - lineSpacing;
+    lineHeight += string_height(scoreLine[i]) - lineSpacing*2;
 }
 
 lineHeight += lineSpacing*2;
