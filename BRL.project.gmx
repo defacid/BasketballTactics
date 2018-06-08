@@ -45,6 +45,7 @@
     <object>objects\obj_skyUI</object>
     <object>objects\obj_jumpBall</object>
     <object>objects\obj_ball</object>
+    <object>objects\obj_message</object>
   </objects>
   <rooms name="rooms">
     <room>rooms\rm_game</room>

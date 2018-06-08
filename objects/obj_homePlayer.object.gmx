@@ -738,10 +738,10 @@ if (highlighted) {
     draw_set_font(fnt_timerName);
     draw_set_alpha(0.5);
     draw_set_color(teamColor);
-    for(i=0; i&lt;8; i++) draw_text(x + pickShiftX - string_width(name[1])/2 + lengthdir_x(1, i*(360/8)), y + pickShiftY + 12 + lengthdir_y(1, i*(360/8)) - 40 * _bottom, name[1]);
+    for(i=0; i&lt;8; i++) draw_text_transformed(x + pickShiftX - string_width(name[1])/4 + lengthdir_x(1, i*(360/8)), y + pickShiftY + 12 + lengthdir_y(1, i*(360/8)) - 40 * _bottom, name[1], .5, .5, 0);
     draw_set_alpha(1);
     draw_set_color(c_white);
-    draw_text(x + pickShiftX - string_width(name[1])/2, y + pickShiftY + 12 - 40 * _bottom, name[1]);
+    draw_text_transformed(x + pickShiftX - string_width(name[1])/4, y + pickShiftY + 12 - 40 * _bottom, name[1], .5, .5, 0);
 }
 
 if (showTarget &amp;&amp; team == global.turn) {

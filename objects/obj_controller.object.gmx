@@ -132,7 +132,7 @@ turnsLeft = string(turns);
 shotTurnsLeft = string(shotClock);
 lineHeight = 8;
 lineSpacing = 4;
-hudWidth = 160;
+hudWidth = room_width-352; //130 @ 480px width
 actionHover = 0;
 endTurnHover = 0;
 
@@ -153,25 +153,25 @@ draw_rectangle(room_width - hudWidth + lineSpacing * 2, lineHeight - lineSpacing
 
 draw_set_font(fnt_timerName);
 draw_set_color(c_black);
-draw_text(room_width - hudWidth + lineSpacing * 4 + 1 + 1, lineHeight + 1, "TURNS LEFT");
-draw_text(room_width - string_width("SHOT CLOCK") - lineSpacing * 4 + 1, lineHeight + 1, "SHOT CLOCK");
+draw_text_transformed(room_width - hudWidth + lineSpacing * 4 + 1 + 1, lineHeight + 1, "TURNS LEFT", .5, .5, 0);
+draw_text_transformed(room_width - string_width("SHOT CLOCK")/2 - lineSpacing * 4 + 1, lineHeight + 1, "SHOT CLOCK", .5, .5, 0);
 
 draw_set_color(c_white);
-draw_text(room_width - hudWidth + lineSpacing * 4 + 1, lineHeight, "TURNS LEFT");
+draw_text_transformed(room_width - hudWidth + lineSpacing * 4 + 1, lineHeight, "TURNS LEFT", .5, .5, 0);
 draw_set_color(c_red);
-draw_text(room_width - string_width("SHOT CLOCK") - lineSpacing * 4, lineHeight, "SHOT CLOCK");
-lineHeight += string_height("SHOT CLOCK") + 1;
+draw_text_transformed(room_width - string_width("SHOT CLOCK")/2 - lineSpacing * 4, lineHeight, "SHOT CLOCK", .5, .5, 0);
+lineHeight += string_height("SHOT CLOCK")/2 + 1;
 
 var timerWidth, shotClockWidth;
-timerWidth = string_width("TURNS LEFT");
-shotClockWidth = string_width("SHOT CLOCK");
+timerWidth = string_width("TURNS LEFT")/2;
+shotClockWidth = string_width("SHOT CLOCK")/2;
 
 draw_set_font(fnt_timer);
 draw_set_color(c_white);
-draw_text(room_width - hudWidth + timerWidth/2 - string_width(turnsLeft)/2 + lineSpacing * 4, lineHeight, turnsLeft);
+draw_text_transformed(room_width - hudWidth + timerWidth/2 - string_width(turnsLeft)/4 + lineSpacing * 4, lineHeight, turnsLeft, .5, .5, 0);
 draw_set_color(c_red);
-draw_text(room_width - shotClockWidth/2 - lineSpacing * 4 - string_width(shotTurnsLeft)/2, lineHeight, shotTurnsLeft);
-lineHeight += string_height(turnsLeft) + lineSpacing;
+draw_text_transformed(room_width - shotClockWidth/2 - lineSpacing * 4 - string_width(shotTurnsLeft)/4, lineHeight, shotTurnsLeft, .5, .5, 0);
+lineHeight += string_height(turnsLeft)/2 + lineSpacing;
 
 for(i=0; i&lt;=1; i++) {
     draw_set_font(fnt_teamName);
@@ -180,7 +180,7 @@ for(i=0; i&lt;=1; i++) {
         draw_set_color(c_white);
         draw_rectangle(room_width - hudWidth + 1, lineHeight + 8 - 4, room_width, lineHeight + 8 + 24 + 4, 0);
         draw_set_alpha(0.5);
-        for(j=0; j&lt;8; j++) draw_text(room_width - hudWidth/2 - string_width(nameLine[i])/2 + lengthdir_x(1, j*(360/8)), lineHeight + lengthdir_y(1, j*(360/8)), nameLine[i]);
+        for(j=0; j&lt;8; j++) draw_text_transformed(room_width - hudWidth/2 - string_width(nameLine[i])/4 + lengthdir_x(1, j*(360/8)), lineHeight + lengthdir_y(1, j*(360/8)), nameLine[i], .5, .5, 0);
     }
     
     draw_set_alpha(1);
@@ -194,18 +194,18 @@ for(i=0; i&lt;=1; i++) {
         default:
             draw_set_color(make_color_rgb(random(255), random(255), random(255)));
     }
-    draw_text(room_width - hudWidth/2 - string_width(nameLine[i])/2, lineHeight, nameLine[i]);
+    draw_text_transformed(room_width - hudWidth/2 - string_width(nameLine[i])/4, lineHeight, nameLine[i], .5, .5, 0);
     if (global.possession == i) {
         draw_set_color(c_white);
         draw_circle(room_width - hudWidth + 16 - 1, lineHeight + 20 - 1, 10, 0);
         draw_sprite_ext(spr_basketball, 0, room_width - hudWidth + 16, lineHeight + 20, .5, .5, 0, c_white, 1);
     }
-    lineHeight += string_height(nameLine[i]) - lineSpacing*2;
+    lineHeight += string_height(nameLine[i])/2 - lineSpacing*2;
     
     draw_set_color(c_white);
     draw_set_font(fnt_score);
-    draw_text(room_width - hudWidth/2 - string_width(scoreLine[i])/2, lineHeight, scoreLine[i]);
-    lineHeight += string_height(scoreLine[i]) - lineSpacing*2;
+    draw_text_transformed(room_width - hudWidth/2 - string_width(scoreLine[i])/4, lineHeight, scoreLine[i], .5, .5, 0);
+    lineHeight += string_height(scoreLine[i])/2 - lineSpacing*2;
 }
 
 lineHeight += lineSpacing*2;
@@ -225,9 +225,9 @@ if (global.highlighted) {
     draw_sprite_ext(spr_face, 0, room_width - hudWidth/2 - sprite_get_width(spr_face)/2, lineHeight, 1, 1, 0, faceColor, 1);
     
     draw_set_font(fnt_statValue);
-    draw_rectangle(room_width - hudWidth/2 - string_width(position)/2 - 4, lineHeight + sprite_get_height(spr_face) - 8, room_width - hudWidth/2 + string_width(position)/2 + 4, lineHeight + sprite_get_height(spr_face) + 10, 0);
+    draw_rectangle(room_width - hudWidth/2 - string_width(position)/4 - 4, lineHeight + sprite_get_height(spr_face) - 8, room_width - hudWidth/2 + string_width(position)/4 + 4, lineHeight + sprite_get_height(spr_face) + 10, 0);
     draw_set_color(c_white);
-    draw_text(room_width - hudWidth/2 - string_width(position)/2, lineHeight + sprite_get_height(spr_face) - 8, position);
+    draw_text_transformed(room_width - hudWidth/2 - string_width(position)/4, lineHeight + sprite_get_height(spr_face) - 8, position, .5, .5, 0);
     
     lineHeight += sprite_get_height(spr_face) + lineSpacing*3;
     
@@ -280,19 +280,19 @@ if (global.highlighted) {
         if (i &gt; 0) {
             draw_set_color(c_white);
             draw_set_font(fnt_statName);
-            draw_text(room_width - hudWidth + lineSpacing*2, lineHeight, statName[i]);
+            draw_text_transformed(room_width - hudWidth + lineSpacing*2, lineHeight, statName[i], .5, .5, 0);
             
             if (i &gt;= 3) draw_set_color(merge_color(c_red, c_lime, (real(statValue[i])*2-100)/100)); //CHANGE THIS LATER
             else draw_set_color(c_white);
             draw_set_font(fnt_statValue);
-            draw_text(room_width - lineSpacing*2 - string_width(statValue[i]), lineHeight, statValue[i]);
-            lineHeight += string_height(statValue[i]) + lineSpacing/2;
+            draw_text_transformed(room_width - lineSpacing*2 - string_width(statValue[i])/2, lineHeight, statValue[i], .5, .5, 0);
+            lineHeight += string_height(statValue[i])/2 + lineSpacing/2;
         }
         else {
             draw_set_color(c_white); //CHANGE THIS LATER
             draw_set_font(fnt_statValue);
-            draw_text(room_width - hudWidth/2 - string_width(statValue[i])/2, lineHeight, statValue[i]);
-            lineHeight += string_height(statValue[i]) + lineSpacing/2;
+            draw_text_transformed(room_width - hudWidth/2 - string_width(statValue[i])/4, lineHeight, statValue[i], .5, .5, 0);
+            lineHeight += string_height(statValue[i])/2 + lineSpacing/2;
         }
     }
     
@@ -334,11 +334,11 @@ else {
         draw_set_font(fnt_statName);
         if (player[i].selected) {
             draw_set_color(_teamColor);
-            for (j=0; j&lt;8; j++) draw_text(room_width - hudWidth + lineSpacing + sprite_get_width(spr_face)/4 + 4 + 8 + lengthdir_x(1, j*360/8), lineHeight + 2 + lengthdir_y(1, j*360/8), player[i].name[0] + " " + player[i].name[1] );
+            for (j=0; j&lt;8; j++) draw_text_transformed(room_width - hudWidth + lineSpacing + sprite_get_width(spr_face)/4 + 4 + 8 + lengthdir_x(1, j*360/8), lineHeight + 2 + lengthdir_y(1, j*360/8), player[i].name[0] + " " + player[i].name[1], .5, .5, 0);
             
         }
         draw_set_color(c_white);
-        draw_text(room_width - hudWidth + lineSpacing + sprite_get_width(spr_face)/4 + 4 + 8, lineHeight + 2, player[i].name[0] + " " + player[i].name[1] );
+        draw_text_transformed(room_width - hudWidth + lineSpacing + sprite_get_width(spr_face)/4 + 4 + 8, lineHeight + 2, player[i].name[0] + " " + player[i].name[1], .5, .5, 0);
         lineHeight += sprite_get_height(spr_face)/4 + lineSpacing + 2;
     }
     
@@ -373,7 +373,7 @@ else {
         draw_set_alpha(1 - 0.5*resetHover);
         draw_set_color(c_white);
         draw_set_halign(fa_center);
-        draw_text(room_width - hudWidth/2, room_height - 40 - 32 - 1, "UNDO CHANGES");
+        draw_text_transformed(room_width - hudWidth/2, room_height - 40 - 32 - 1, "UNDO CHANGES");
         draw_set_halign(fa_left);
         */
         
@@ -431,7 +431,7 @@ else {
             draw_set_alpha(1 - 0.5*actionHover);
             draw_set_color(c_white);
             draw_set_halign(fa_center);
-            draw_text(room_width - hudWidth/2, room_height - 40 - 32 - 1, actionName);
+            draw_text_transformed(room_width - hudWidth/2, room_height - 40 - 32 - 1, actionName, .5, .5, 0);
             draw_set_halign(fa_left);
         }
         
@@ -465,7 +465,7 @@ else {
         draw_set_alpha(1 - 0.5*endTurnHover);
         draw_set_color(c_white);
         draw_set_halign(fa_center);
-        draw_text(room_width - hudWidth/2, room_height - 32 - 1, "END TURN");
+        draw_text_transformed(room_width - hudWidth/2, room_height - 32 - 1, "END TURN", .5, .5, 0);
         draw_set_halign(fa_left);
     }
 }
