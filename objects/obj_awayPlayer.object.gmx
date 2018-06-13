@@ -37,22 +37,23 @@ throwIn = 0;
 foulShot = 0; //Whether shooting a foul shot
 shotChance = 0;
 react = 1;
-openness = 1.5;
+openness = 1.25;
 goal = obj_homeHoop;
 teammate = obj_homePlayer;
 opponent = obj_awayPlayer;
 teamColor = c_white;
-teamColor = make_color_rgb(75, 75, 175);
+teamColor = global.homeColor;
 if (team) {
     goal = obj_awayHoop;
     teammate = obj_awayPlayer;
     opponent = obj_homePlayer;
-    teamColor = make_color_rgb(150, 25, 25);
+    teamColor = global.awayColor;
 }
 target = goal;
 selected = 0;
 highlighted = 0;
 held = 0;
+locked = 0;
 
 //Movment
 canMove = 0;
@@ -160,8 +161,53 @@ alarm[0] = 1;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//Generate stats
+            <string>//Set a random position
 if (position == "Default") position = choose("Forward", "Center", "Guard");
+
+//Generate stats
+name = random_name(); //name[0] - First Name, name[1] - Last Name
+
+var _r, _g, _b;
+skin = irandom(9);
+switch(skin) {
+    case 0:
+        _r = 125;
+        _g = 65;
+        _b = 55;
+        break;
+    case 1:
+        _r = 196;
+        _g = 144;
+        _b = 124;
+        break;
+    case 2:
+        _r = 197;
+        _g = 164;
+        _b = 126;
+        break;
+    case 3:
+        _r = 221;
+        _g = 181;
+        _b = 148;
+        break;
+    case 4:
+        _r = 80;
+        _g = 35;
+        _b = 0;
+        break;
+    case 5:
+        _r = 232;
+        _g = 202;
+        _b = 179;
+        break;
+    case 6:
+    default:
+        _r = 90;
+        _g = 45;
+        _b = 20;
+        break;
+}
+faceColor = make_color_rgb(_r, _g, _b);
 
 switch(position) {
     case "Forward":
@@ -347,8 +393,8 @@ else {
 }
 
 //Highlight player and show stats
-if (point_distance(x, y, mouse_x, mouse_y) &lt; 16) {
-    if (!global.highlighted) {
+if (point_distance(x, y, mouse_x, mouse_y) &lt; 16 &amp;&amp; obj_controller.titlePhase = 1) {
+    if (!global.highlighted &amp;&amp; !obj_controller.canTurnover &amp;&amp; !instance_exists(obj_jumpBall)) {
         global.highlighted = 1;
         highlighted = 1;
         
@@ -417,8 +463,8 @@ if (point_distance(x, y, mouse_x, mouse_y) &lt; 16) {
                     _ball.type = "pass";
                     _ball.shooter = mySelf;
                     _ball.target = _mySelf;
-                    _ball.distance = point_distance(_ball.x, _ball.y, _mySelf.x, _mySelf.y) + (32 - random(64))*(1-_openness);
-                    _ball.dir = point_direction(_ball.x, _ball.y, _mySelf.x, _mySelf.y) + (5 - random(10))*(1-_openness);
+                    _ball.distance = point_distance(_ball.x, _ball.y, _mySelf.x, _mySelf.y) + (48 - random(96))*(1-_openness);
+                    _ball.dir = point_direction(_ball.x, _ball.y, _mySelf.x, _mySelf.y) + (8 - random(16))*(1-_openness);
                     _ball.passSpeed = room_speed/2;
                 }
             }

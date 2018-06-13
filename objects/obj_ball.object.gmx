@@ -139,10 +139,13 @@ if (type = "blocked") {
 if (!canTurnover) {
     if (type = "shoot") {
         if (abs(x - target.x) &lt; 32) {
+            
+            //Inline color
+            /*
             draw_set_alpha(1);
             draw_set_color(c_aqua);
             draw_circle(x, y, 8, 0);
-            
+            */
             
             if ((target == obj_homeHoop &amp;&amp; y &lt; 32) || (target == obj_awayHoop &amp;&amp; y &gt; room_height - 32)) {
                 dir = dir + 180 + 45 - random(90);
@@ -157,7 +160,7 @@ if (!canTurnover) {
     
     if (arc &gt;= 180) {
         if (type = "shoot") {
-            if (point_distance(x, y, target.x, target.y) &lt; 10) {
+            if (point_distance(x, y, target.x, target.y) &lt; 16) {
                 //SCORE
                 
                 var _points;

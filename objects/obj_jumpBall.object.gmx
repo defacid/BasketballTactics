@@ -27,7 +27,32 @@
             <kind>1</kind>
             <string>canPlay = 0;
 dribble = 0;
+start = 0;
 alarm[0] = room_speed;
+</string>
+          </argument>
+        </arguments>
+      </action>
+    </event>
+    <event eventtype="2" enumb="1">
+      <action>
+        <libid>1</libid>
+        <id>603</id>
+        <kind>7</kind>
+        <userelative>0</userelative>
+        <isquestion>0</isquestion>
+        <useapplyto>-1</useapplyto>
+        <exetype>2</exetype>
+        <functionname></functionname>
+        <codestring></codestring>
+        <whoName>self</whoName>
+        <relative>0</relative>
+        <isnot>0</isnot>
+        <arguments>
+          <argument>
+            <kind>1</kind>
+            <string>motion_set(45 + random(90), sign(1 - random(2))*(2 + random(1)));
+start = 2;
 </string>
           </argument>
         </arguments>
@@ -51,7 +76,7 @@ alarm[0] = room_speed;
           <argument>
             <kind>1</kind>
             <string>canPlay = 1;
-motion_set(45 + random(90), sign(1 - random(2))*(2 + random(1)));
+
 </string>
           </argument>
         </arguments>
@@ -74,38 +99,48 @@ motion_set(45 + random(90), sign(1 - random(2))*(2 + random(1)));
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>if (canPlay) dribble = (dribble + 5) mod 360;
-draw_sprite_ext(spr_basketball, 0, x, y, 0.3 + 0.25*sin(degtorad(dribble)), 0.3 + 0.25*sin(degtorad(dribble)), 0, c_white, 1);
+            <string>if (canPlay) {
 
-if (dribble = 180) {
-    
-    var homeNearest, awayNearest;
-    homeNearest = point_distance(x, y, instance_nearest(x, y, obj_homePlayer).x, instance_nearest(x, y, obj_homePlayer).y);
-    awayNearest = point_distance(x, y, instance_nearest(x, y, obj_awayPlayer).x, instance_nearest(x, y, obj_awayPlayer).y);
-    
-    if (homeNearest &lt; awayNearest) {
-        h = instance_nearest(x, y, obj_homePlayer);
-        h.ballHandler = 1;
-        global.possession = 0;
-        with (obj_homePlayer) {
-            canMove = 1;
-            canUndo = 1;
-        }
-    }
-    else {
-        a = instance_nearest(x, y, obj_awayPlayer);
-        a.ballHandler = 1;
-        global.possession = 1;
-        with (obj_awayPlayer) {
-            canMove = 1;
-            canUndo = 1;
-        }
+    if (start == 0 &amp;&amp; mouse_check_button(mb_any) &amp;&amp; mouse_x &lt; room_width-160) { //160 = obj_controller temp var hudWidth
+        start = 1;
+        obj_controller.titlePhase = 1;
+        alarm[1] = room_speed*2;
     }
     
-    global.turn = global.possession;
-    global.firstTurn = global.turn;
-    instance_destroy();
+    if (start &gt; 1) dribble = (dribble + 5) mod 360;
+    
+    if (dribble = 180) {
+        
+        var homeNearest, awayNearest;
+        homeNearest = point_distance(x, y, instance_nearest(x, y, obj_homePlayer).x, instance_nearest(x, y, obj_homePlayer).y);
+        awayNearest = point_distance(x, y, instance_nearest(x, y, obj_awayPlayer).x, instance_nearest(x, y, obj_awayPlayer).y);
+        
+        if (homeNearest &lt; awayNearest) {
+            h = instance_nearest(x, y, obj_homePlayer);
+            h.ballHandler = 1;
+            global.possession = 0;
+            with (obj_homePlayer) {
+                canMove = 1;
+                canUndo = 1;
+            }
+        }
+        else {
+            a = instance_nearest(x, y, obj_awayPlayer);
+            a.ballHandler = 1;
+            global.possession = 1;
+            with (obj_awayPlayer) {
+                canMove = 1;
+                canUndo = 1;
+            }
+        }
+        
+        global.turn = global.possession;
+        global.firstTurn = global.turn;
+        instance_destroy();
+    }
 }
+
+draw_sprite_ext(spr_basketball, 0, x, y, 0.3 + 0.25*sin(degtorad(dribble)), 0.3 + 0.25*sin(degtorad(dribble)), 0, c_white, 1);
 </string>
           </argument>
         </arguments>

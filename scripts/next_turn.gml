@@ -4,8 +4,15 @@ global.turn = 1 - global.turn;
 global.actionClear = 1;
 
 if (global.turn == global.firstTurn) {
-    turns--;
-    shotClock--;
+    var _ballHandler = global.ballHandler;
+    if (_ballHandler.throwIn & !canTurnover) {
+        canTurnover = 1;
+        alarm[1] = room_speed*2;
+    }
+    else {
+        turns--;
+        shotClock--;
+    }
 }
 
 for(i=0; i<global.playerCount; i++) {

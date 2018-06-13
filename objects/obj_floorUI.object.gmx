@@ -73,7 +73,16 @@ surface_reset_target();
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>draw_set_alpha(1);
+            <string>draw_set_alpha(0.25);
+
+draw_set_color(global.homeColor);
+draw_rectangle(132, 37, 219, 175, 0);
+
+draw_set_color(global.awayColor);
+draw_rectangle(132, 465, 219, 603, 0);
+
+draw_set_alpha(1);
+
 draw_surface(ui, 0, 0);
 
 surface_set_target(ui);

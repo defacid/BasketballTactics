@@ -11,6 +11,10 @@
     <sprite>sprites\spr_basketball</sprite>
     <sprite>sprites\spr_home</sprite>
     <sprite>sprites\spr_away</sprite>
+    <sprite>sprites\spr_title</sprite>
+    <sprite>sprites\spr_logoSmall</sprite>
+    <sprite>sprites\spr_defacid</sprite>
+    <sprite>sprites\spr_reroll</sprite>
   </sprites>
   <backgrounds name="background">
     <background>background\bkg_court</background>

@@ -67,7 +67,7 @@
                 _ball.touchedLast = team;
                 _ball.target = _mySelf;
                 _ball.distance = point_distance(_ball.x, _ball.y, _mySelf.x, _mySelf.y) + 4*(random(2) - 1)*(1-chance + overshot); //The closer you are, the lower the chance of you over or under shooting the ball
-                _ball.dir = point_direction(x, y, target.x, target.y) + 5*(random(2) - 1)*(1-chance + (1 - (point_distance(x, y, _mySelf.x, _mySelf.y))/320)); //The farther you get the less off the angle will be outside of the effect it has on chance, since nobobdy is goign to throw WILDLY off shots 
+                _ball.dir = point_direction(x, y, target.x, target.y) +  10*(1-chance)*(random(2) - 1)*(1-chance + (1 - (point_distance(x, y, _mySelf.x, _mySelf.y))/320)); //The farther you get the less off the angle will be outside of the effect it has on chance, since nobobdy is goign to throw WILDLY off shots 
                 _ball.passSpeed = room_speed/2;
             }
         }
