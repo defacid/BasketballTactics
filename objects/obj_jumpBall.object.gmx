@@ -53,6 +53,7 @@ alarm[0] = room_speed;
             <kind>1</kind>
             <string>motion_set(45 + random(90), sign(1 - random(2))*(2 + random(1)));
 start = 2;
+global.highlighted = 0;
 </string>
           </argument>
         </arguments>

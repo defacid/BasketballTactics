@@ -122,6 +122,8 @@ motion_add(dir, (distance/passTime)/10);
 
 if (speed &gt; distance/passTime &amp;&amp; !rolling) speed = distance/passTime;
 
+draw_text(4, 4, touchedLast);
+
 
 //Set the passing speed
 arc = (arc + 180/passTime) mod 360;
@@ -136,7 +138,7 @@ if (type = "blocked") {
     draw_circle(x, y, 8, 0);
 }
 
-if (!canTurnover) {
+if (!obj_controller.canTurnover) {
     if (type = "shoot") {
         if (abs(x - target.x) &lt; 32) {
             
@@ -173,8 +175,10 @@ if (!canTurnover) {
                 target.image_speed = 0.2;
                 
                 //TURNOVER
-                alarm[1] = room_speed*2;
-                canTurnover = 1;
+                with(obj_controller) {
+                    alarm[1] = room_speed*2;
+                    canTurnover = 1;
+                }
                 
                 //instance_destroy();
                 alpha = 0;
@@ -210,8 +214,10 @@ if (!canTurnover) {
                     global.possession = touchedLast;
                     
                     //TURNOVER
-                    alarm[1] = room_speed*2;
-                    canTurnover = 1;
+                    with(obj_controller) {
+                        alarm[1] = room_speed*2;
+                        canTurnover = 1;
+                    }
 
                     //instance_destroy();
                 }
@@ -224,16 +230,17 @@ if (!canTurnover) {
         global.possession = touchedLast;
         
         //TURNOVER
-        alarm[1] = room_speed*2;
-        canTurnover = 1;
-        
+        with(obj_controller) {
+            alarm[1] = room_speed*2;
+            canTurnover = 1;
+        }
         alpha = 0;
         //instance_destroy();
     }
 }
 
 if (x &lt; 0 || x &gt; room_width - 160 || y &lt; 0 || y &gt; room_height) {
-    alpha = 0;
+    instance_destroy();
 }
 </string>
           </argument>

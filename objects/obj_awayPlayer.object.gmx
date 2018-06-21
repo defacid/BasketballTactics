@@ -51,7 +51,7 @@ if (team) {
 }
 target = goal;
 selected = 0;
-highlighted = 0;
+highlighted = 1;
 held = 0;
 locked = 0;
 
@@ -618,7 +618,27 @@ if (ballHandler &amp;&amp; !throwIn &amp;&amp; !obj_controller.canTurnover &amp;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//FIX BLOCKING NOW!!!!
+            <string>//BLOCKS AND STEALS MIGHT BE FIXED NOW!?!?!!
+if (react &amp;&amp; distance_to_object(other) &lt; 8) {
+    var _team = other.touchedLast;
+    
+    if (team != _team) {
+        var _steal = random(steal)/4, _block = random(block)/2;
+        
+        if (_steal &gt; 25) { // Try to steal
+            with(other) {
+                grab_ball();
+            }
+        }
+        else if (_block &gt; 25) {  // Try to block
+            other.dir += 180 + 30 - random(60);
+        }
+    }
+    
+    react = 0;
+}
+
+//FIX BLOCKING NOW!!!!
 
 /*if (react &amp;&amp; distance_to_object(other) &lt; 16) {
     //Try to block
