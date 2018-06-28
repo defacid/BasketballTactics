@@ -42,7 +42,7 @@ global.homeColor = make_color_rgb(46, 49, 146);
 global.awayColor = make_color_rgb(121, 0, 0);
 
 //Init
-turns = 10; //15 min * 60 sec = 900, So @ 300 Turns, Each turn is 3 seconds
+turns = 100; //15 min * 60 sec = 900, So @ 300 Turns, Each turn is 3 seconds
 shotClockMax = 10; // 8 - 24 Second Shot Clock | 10 - 30 Second Shot Clock 
 shotClock = shotClockMax; 
 homeScore = 0;
@@ -155,21 +155,28 @@ scoreLine[1] = string(awayScore);
 
 //title screen
 
-draw_set_alpha(titleAlpha*0.5);
+draw_set_alpha(titleAlpha*0.75);
 draw_set_color(c_black);
 draw_rectangle(0, 0, room_width-hudWidth, room_height, 0);
 
 if (titlePhase &lt; 2 &amp;&amp; titleAlpha &gt; 0) {
     draw_sprite_ext(spr_defacid, 0, (room_width-hudWidth)/2 - sprite_get_width(spr_defacid)/8, 80 - 24*titleAlpha, 0.25, 0.25, 0, c_white, titleAlpha);
-    draw_sprite_ext(spr_title, 0, (room_width-hudWidth)/2, 144 + 32*titleAlpha, 0.5, 0.5, 0, c_white, sqr(titleAlpha));
+    draw_sprite_ext(spr_title, 0, (room_width-hudWidth)/2, 144 + 32*titleAlpha, 1, 1, 0, c_white, sqr(titleAlpha));
     
     draw_set_font(fnt_statValue);
+    var info = "This game can be played entirely using a mouse or touchscreen.
+    #Drag players to move them OR press the top button to initiate a player specific action.
+    #If you don't want to make any more moves, press the bottom button to end your turn early.
+    ##FOR MORE WEIRD JUNK:#Twitter: @defacid#Website: http://defacid.com#Patreon: http://patreon.com/defacid";
+    
+    draw_set_color(c_black);
+    draw_set_alpha(sqr(titleAlpha)/2);
+    draw_text_ext((room_width-hudWidth)/2-(room_width-hudWidth-96)/2, 320 - 24*titleAlpha + 1, info, 16, room_width-hudWidth-96);
     draw_set_color(c_white);
     draw_set_alpha(sqr(titleAlpha));
-    var info = "A GAME BY";
-    //draw_text((room_width-hudWidth)/2-string_width(info)/2, 64 - 24*titleAlpha, info);
+    draw_text_ext((room_width-hudWidth)/2-(room_width-hudWidth-96)/2, 320 - 24*titleAlpha, info, 16, room_width-hudWidth-96);
     draw_set_alpha(0.25 + titleAlpha*sin(current_time/300));
-    info = "Click to Start";
+    info = "Click to Start - ESC to Quit";
     draw_text((room_width-hudWidth)/2-string_width(info)/2, room_height - string_height(info) - 8, info);
 }
 
@@ -305,7 +312,8 @@ if (titlePhase != 0) {
         draw_text(room_width - hudWidth/2 - string_width(nameLine[i])/2, lineHeight, nameLine[i]);
         if (global.possession == i) {
             draw_set_color(c_white);
-            draw_circle(room_width - hudWidth + 16 - 1, lineHeight + 20 - 1, 10, 0);
+            if (os_type != os_macosx) draw_circle(room_width - hudWidth + 16 - 1, lineHeight + 20 - 1, 10, 0);
+            else draw_circle(room_width - hudWidth + 16, lineHeight + 20, 10, 0);
             draw_sprite_ext(spr_basketball, 0, room_width - hudWidth + 16, lineHeight + 20, .5, .5, 0, c_white, 1);
         }
         lineHeight += string_height(nameLine[i]) - lineSpacing*2;
@@ -320,14 +328,40 @@ if (titlePhase != 0) {
     highlightHeight = lineHeight;
 }
 
+//Draw title menu
+if (titlePhase == 0) {
+    draw_set_halign(fa_center);
+    draw_set_font(fnt_timerName);
+    draw_set_color(c_white);
+    var hText = "Hover to show stats";
+    draw_set_halign(fa_left);
+    draw_text(room_width - hudWidth/2 - string_width(hText)/2, 6, hText);
+    draw_set_font(fnt_teamName);
+    draw_set_color(global.homeColor);
+    draw_text(room_width - hudWidth/2 - string_width(nameLine[0])/2, 24, nameLine[0]);
+    draw_set_color(global.awayColor);
+    draw_text(room_width - hudWidth/2 - string_width(nameLine[1])/2, 220, nameLine[1]);
     
+    lineHeight += 56;
+}
 
 //Draw player list
 var hover = -1;
 
-if (titlePhase == 0) lineHeight += 32;
-
 for (i=0; i&lt;global.playerCount; i++) {
+    var _teamColor;
+    switch(player[i].team) {
+        case 0:
+            _teamColor = global.homeColor;
+            break;
+        case 1:
+            _teamColor = global.awayColor;
+            if (titlePhase == 0 &amp;&amp; lineHeight &lt; 212 + 48) lineHeight = 212 + 48;
+            break;
+        default:
+            _teamColor = make_color_rgb(random(255), random(255), random(255));
+    }
+
     if (titlePhase == 0) {
         if (mouse_x &gt; room_width-hudWidth &amp;&amp; mouse_y &gt; lineHeight - 4 &amp;&amp; mouse_y &lt; lineHeight + sprite_get_height(spr_face)/4 + lineSpacing - 1) {
             hover = i;
@@ -370,19 +404,8 @@ for (i=0; i&lt;global.playerCount; i++) {
 
     if (titlePhase = 1) draw_set_alpha(0.25 + 0.75*player[i].canMove);
     else draw_set_alpha(1);
-    var _teamColor;
-    switch(player[i].team) {
-        case 0:
-            _teamColor = global.homeColor;
-            break;
-        case 1:
-            _teamColor = global.awayColor;
-            break;
-        default:
-            _teamColor = make_color_rgb(random(255), random(255), random(255));
-    }
+    
     draw_set_color(_teamColor);
-    if (player[i].ballHandler &amp;&amp; titlePhase == 1) draw_sprite_ext(spr_basketball, 0, room_width - hudWidth + 4, lineHeight + 12, 0.25, 0.25, 0, c_white, 1);
     if (i == hover) draw_sprite_ext(spr_reroll, player[i].locked, room_width - hudWidth + lineSpacing + 4 + 12, lineHeight + 12, 0.33, 0.33, -current_time/10*(1-player[i].locked), c_white, 1);
     else {
         draw_rectangle(room_width - hudWidth + lineSpacing + 4 - 2, lineHeight - 2, room_width - hudWidth + lineSpacing + 4 + sprite_get_width(spr_face)/4 + 1, lineHeight + sprite_get_height(spr_face)/4 + 1, 0);
@@ -395,6 +418,8 @@ for (i=0; i&lt;global.playerCount; i++) {
         for (j=0; j&lt;8; j++) draw_text(room_width - hudWidth + lineSpacing + sprite_get_width(spr_face)/4 + 4 + 8 + lengthdir_x(1, j*360/8), lineHeight + 2 + lengthdir_y(1, j*360/8), player[i].name[0] + " " + player[i].name[1] );
         
     }
+    
+    if (player[i].ballHandler &amp;&amp; titlePhase == 1) draw_sprite_ext(spr_basketball, 0, room_width - hudWidth + 8, lineHeight + 12, 0.33, 0.33, 0, c_white, 1);
     
     draw_set_color(c_white);
     var rerollText = "REROLL";
@@ -544,7 +569,7 @@ if (global.possession != -1 &amp;&amp; !canTurnover &amp;&amp; titlePhase &lt; 2
     draw_set_halign(fa_left);
 }
 
-if (titlePhase == 1) {
+if (titlePhase == 1 &amp;&amp; instance_exists(obj_homePlayer) &amp;&amp; instance_exists(obj_awayPlayer)) {
     var _home, homeNearest, _away, awayNearest;
     _home = instance_nearest(mouse_x, mouse_y, obj_homePlayer);
     _away = instance_nearest(mouse_x, mouse_y, obj_awayPlayer);
@@ -606,7 +631,7 @@ if (global.highlighted) {
         draw_rectangle(room_width-hudWidth + 2 - hOffset - 4, highlightHeight - 12 - 4, room_width-hudWidth - 4, highlightHeight + sprite_get_height(spr_face) + lineSpacing*3 + 9*(18 + lineSpacing/2) + 4, 0);
     }
     
-    draw_set_alpha(0.9);
+    draw_set_alpha(1);
     draw_set_color(make_color_rgb(24, 24, 24));
     draw_rectangle(room_width-hudWidth + 2 - hOffset, highlightHeight - 12, room_width-hOffset - 4, highlightHeight + sprite_get_height(spr_face) + lineSpacing*3 + 9*(18 + lineSpacing/2) + titlePhase*12, 0);
     
@@ -720,7 +745,17 @@ if (global.highlighted) {
 
 
 //DEBUG
-if (keyboard_check_pressed(ord('R'))) room_restart();
+//if (keyboard_check_pressed(ord('R'))) room_restart();
+//if (keyboard_check_pressed(ord('E'))) turns = 1;
+if (keyboard_check_pressed(vk_escape)) {
+    switch(titlePhase) {
+        case 0:
+            game_end();
+        break;
+        default:
+            game_restart();
+    }
+}
 /*if (mouse_check_button_pressed(mb_right) &amp;&amp; global.turn != -1 &amp;&amp; !canTurnover) {
     obj_homePlayer.selected = 0;
     obj_awayPlayer.selected = 0;

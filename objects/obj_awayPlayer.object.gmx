@@ -618,12 +618,34 @@ if (ballHandler &amp;&amp; !throwIn &amp;&amp; !obj_controller.canTurnover &amp;
         <arguments>
           <argument>
             <kind>1</kind>
-            <string>//BLOCKS AND STEALS MIGHT BE FIXED NOW!?!?!!
+            <string>//BLOCKS AND STEALS MIGHT BE IMPROVED NOW!?!?!!
+if (react &amp;&amp; distance_to_object(other) &lt; 8) {
+    var _shooter = other.shooter, _team = _shooter.team;
+    
+    if (team != _team &amp;&amp; other.shooter != self &amp;&amp; distance_to_object(other.shooter) &lt; 64) {
+        var _steal = random(steal*(1 + 0.25*pick))/4, _block = random(block*(1 + 0.25*pick))/2;
+        
+        if (_steal &gt; 25) { // Try to steal
+            with(other) {
+                grab_ball();
+            }
+        }
+        else if (_block &gt; 25) {  // Try to block
+            other.dir += 180 + 30 - random(60);
+            other.touchedLast = team;
+        }
+    }
+    
+    react = 0;
+}
+
+//Fixed Blocking
+/*
 if (react &amp;&amp; distance_to_object(other) &lt; 8) {
     var _team = other.touchedLast;
     
     if (team != _team) {
-        var _steal = random(steal)/4, _block = random(block)/2;
+        var _steal = random(steal*(1 + 0.25*pick))/4, _block = random(block*(1 + 0.25*pick))/2;
         
         if (_steal &gt; 25) { // Try to steal
             with(other) {
@@ -635,26 +657,6 @@ if (react &amp;&amp; distance_to_object(other) &lt; 8) {
         }
     }
     
-    react = 0;
-}
-
-//FIX BLOCKING NOW!!!!
-
-/*if (react &amp;&amp; distance_to_object(other) &lt; 16) {
-    //Try to block
-    var blockAttempt, shooter;
-    shooter = other.shooter;
-    
-    if (shooter.team != team &amp;&amp; point_distance(shooter.x, shooter.y, x, y) &lt; 48){
-        blockAttempt = (1 - shooter.openness) + (block/100) + random(1)/2;
-        
-        if (blockAttempt &gt;= 1) {
-            other.distance = 16 + random(80);
-            other.arc = 0;
-            other.dir = other.dir + 180 + 60 - random(120);
-            other.type = "blocked";
-        }
-    }
     react = 0;
 }
 */

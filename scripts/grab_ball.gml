@@ -18,7 +18,7 @@ if (player.team != global.possession) {
     //with(obj_controller) next_turn();
 }
 
-if (player.x < 32 || player.x > room_width - 160 - 32 || player.x < 32 || player.y > room_height - 32) turnover();
+//if (player.x < 32 || player.x > room_width - 160 - 32 || player.x < 32 || player.y > room_height - 32) turnover();
 
 global.actionClear = 1;
 instance_destroy();
